@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 class MessageFieldBox extends StatelessWidget {
-  const MessageFieldBox({super.key});
+  final ValueChanged<String> onValue;
+  const MessageFieldBox({super.key, required this.onValue});
 
   @override
   Widget build(BuildContext context) {
@@ -13,14 +14,14 @@ class MessageFieldBox extends StatelessWidget {
         borderRadius: BorderRadius.circular(40));
 
     final inputDecoration = InputDecoration(
-      hintText: 'End your message with ?',
+        hintText: 'End your message with ?',
         filled: true,
         suffixIcon: IconButton(
           icon: const Icon(Icons.send_outlined),
           onPressed: () {
             final textValue = textController.value.text;
-            print('boton $textValue');
             textController.clear();
+            onValue(textValue);
           },
         ),
         enabledBorder: outlineInputBorder,
@@ -30,9 +31,9 @@ class MessageFieldBox extends StatelessWidget {
       focusNode: focusNode,
       decoration: inputDecoration,
       onFieldSubmitted: (value) {
-        print('submit');
         textController.clear();
         focusNode.requestFocus();
+        onValue(value);
       },
       controller: textController,
       onTapOutside: (event) => focusNode.unfocus(),
